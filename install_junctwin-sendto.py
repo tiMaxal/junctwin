@@ -20,10 +20,10 @@ def create_sendto_entry():
     
     # Get the current script directory
     script_dir = Path(__file__).parent.resolve()
-    python_script = script_dir / "create_junction.py"
+    python_script = script_dir / "junctwin.py"
     
     if not python_script.exists():
-        print(f"Error: create_junction.py not found at {python_script}")
+        print(f"Error: junctwin.py not found at {python_script}")
         return False
     
     # Find Python executable

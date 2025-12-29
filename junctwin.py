@@ -15,13 +15,15 @@ class JunctionCreatorGUI:
     def __init__(self, source_folder):
         self.source_folder = Path(source_folder).resolve()
         self.target_folder = None
-        self.direction = tk.StringVar(value="to_source")
         
-        # Create main window
+        # Create main window first
         self.root = tk.Tk()
         self.root.title("junctwin")
-        self.root.geometry("550x300"
+        self.root.geometry("550x300")
         self.root.resizable(False, False)
+        
+        # Initialize direction variable after root is created
+        self.direction = tk.StringVar(value="to_source")
         
         # Center window
         self.root.update_idletasks()
@@ -172,29 +174,43 @@ class JunctionCreatorGUI:
 
 
 def main():
-    # Check if running with administrator privileges
     try:
-        if not os.path.exists(sys.argv[1]):
+        # Check if folder argument provided
+        if len(sys.argv) < 2:
+            root = tk.Tk()
+            root.withdraw()
             messagebox.showerror("Error", 
-                               f"Folder not found: {sys.argv[1]}")
-            sys.exit(1)
-    except IndexError:
+                               "No folder specified!\n\n"
+                               "This script should be called from the 'Send To' menu.")
+            return
+        
+        source_folder = sys.argv[1]
+        
+        # Check if folder exists
+        if not os.path.exists(source_folder):
+            root = tk.Tk()
+            root.withdraw()
+            messagebox.showerror("Error", 
+                               f"Folder not found: {source_folder}")
+            return
+        
+        # Verify it's a directory
+        if not os.path.isdir(source_folder):
+            root = tk.Tk()
+            root.withdraw()
+            messagebox.showerror("Error", 
+                               "Please select a folder, not a file!")
+            return
+        
+        # Create and run GUI
+        app = JunctionCreatorGUI(source_folder)
+        app.run()
+        
+    except Exception as e:
+        root = tk.Tk()
+        root.withdraw()
         messagebox.showerror("Error", 
-                           "No folder specified!\n\n"
-                           "This script should be called from the 'Send To' menu.")
-        sys.exit(1)
-    
-    source_folder = sys.argv[1]
-    
-    # Verify it's a directory
-    if not os.path.isdir(source_folder):
-        messagebox.showerror("Error", 
-                           "Please select a folder, not a file!")
-        sys.exit(1)
-    
-    # Create and run GUI
-    app = JunctionCreatorGUI(source_folder)
-    app.run()
+                           f"An error occurred:\n\n{str(e)}")
 
 
 if __name__ == "__main__":
