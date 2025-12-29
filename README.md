@@ -1,5 +1,7 @@
 # junctwin
 
+created by ai 'voding' [vibe-coding] copilot20251229timaxal
+
 ## windows right-click junctions instead of shortcuts
 
 A Python application that adds a convenient "Send To" menu entry for creating junction points in Windows 11.
